@@ -1,1 +1,49 @@
+# Video files (large, should be obtained separately)
 Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.mkv
+*.mkv
+*.mp4
+*.avi
+
+# .NET build artifacts (but not plugin output)
+jellyfin-plugin/bin/
+jellyfin-plugin/obj/
+*.cache
+*.tmp
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# NuGet packages
+packages/
+*.nupkg
+*.snupkg
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Plugin build output is intentionally included for releases
+# plugin/ directory contains the built plugin DLLs for easy download

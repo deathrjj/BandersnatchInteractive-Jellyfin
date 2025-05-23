@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Interactive Video Player</title>
+</head>
+<body>
+    <div id="InteractiveVideoConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox,emby-select">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="InteractiveVideoConfigForm">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">Interactive Video Player Configuration</h2>
+                    </div>
+                    
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="IsEnabled">Enable Interactive Video Player</label>
+                        <input is="emby-checkbox" type="checkbox" id="IsEnabled" />
+                        <div class="fieldDescription">Enable or disable the Interactive Video Player plugin</div>
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="DefaultChoiceTimeoutSeconds">Default Choice Timeout (seconds)</label>
+                        <input is="emby-input" type="number" id="DefaultChoiceTimeoutSeconds" min="5" max="30" step="1" />
+                        <div class="fieldDescription">How long users have to make a choice before auto-selecting the default option</div>
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ShowDebugInfo">Show Debug Information</label>
+                        <input is="emby-checkbox" type="checkbox" id="ShowDebugInfo" />
+                        <div class="fieldDescription">Show debug information in the browser console for troubleshooting</div>
+                    </div>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="MetadataPath">Custom Metadata Path</label>
+                        <input is="emby-input" type="text" id="MetadataPath" />
+                        <div class="fieldDescription">Optional: Path to custom interactive metadata files (leave empty to use built-in Bandersnatch data)</div>
+                    </div>
+
+                    <div class="checkboxContainer">
+                        <h3>How to Use Interactive Video Player</h3>
+                        <div class="fieldDescription">
+                            <ol>
+                                <li>Add your Bandersnatch video file (duration 5:12:14) to your Jellyfin library</li>
+                                <li>Navigate to the video in Jellyfin and click the "Play Interactive" button (if available)</li>
+                                <li>Alternatively, access the interactive player directly at: <code>/InteractiveVideo/Player/{ItemId}</code></li>
+                                <li>Use arrow keys or click to make choices during interactive moments</li>
+                                <li>Press 'F' to toggle fullscreen mode</li>
+                            </ol>
+                            
+                            <p><strong>Supported Files:</strong></p>
+                            <ul>
+                                <li>Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.mkv</li>
+                                <li>Black.Mirror.Bandersnatch.2018.MULTi.1080p.NF.WEB-DL.x264-NSP.mkv</li>
+                                <li>Black.Mirror.Bandersnatch.2018.MULTi.720p.NF.WEB-DL.x264-NSP.mkv</li>
+                            </ul>
+
+                            <p><strong>Note:</strong> This plugin works best with Chrome/Chromium browsers and requires the full Bandersnatch video file containing all scenes.</p>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            (function () {
+                var pluginId = "42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c";
+
+                var InteractiveVideoConfigPage = {
+                    pluginUniqueId: pluginId,
+
+                    loadConfiguration: function () {
+                        Dashboard.showLoadingMsg();
+
+                        ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                            document.querySelector('#IsEnabled').checked = config.IsEnabled || false;
+                            document.querySelector('#DefaultChoiceTimeoutSeconds').value = config.DefaultChoiceTimeoutSeconds || 10;
+                            document.querySelector('#ShowDebugInfo').checked = config.ShowDebugInfo || false;
+                            document.querySelector('#MetadataPath').value = config.MetadataPath || '';
+
+                            Dashboard.hideLoadingMsg();
+                        });
+                    },
+
+                    saveConfiguration: function () {
+                        Dashboard.showLoadingMsg();
+
+                        var config = {
+                            IsEnabled: document.querySelector('#IsEnabled').checked,
+                            DefaultChoiceTimeoutSeconds: parseInt(document.querySelector('#DefaultChoiceTimeoutSeconds').value) || 10,
+                            ShowDebugInfo: document.querySelector('#ShowDebugInfo').checked,
+                            MetadataPath: document.querySelector('#MetadataPath').value || ''
+                        };
+
+                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    }
+                };
+
+                window.InteractiveVideoConfigPage = InteractiveVideoConfigPage;
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    InteractiveVideoConfigPage.loadConfiguration();
+
+                    document.querySelector('#InteractiveVideoConfigForm').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        InteractiveVideoConfigPage.saveConfiguration();
+                        return false;
+                    });
+                });
+
+            })();
+        </script>
+    </div>
+</body>
+</html> 
