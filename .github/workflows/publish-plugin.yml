@@ -123,5 +123,5 @@ jobs:
           echo "No changes to manifest.json"
         else
           git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.1' }}"
-          git push origin master
+          git push origin HEAD:master
         fi 
