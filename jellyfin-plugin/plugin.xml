@@ -9,7 +9,7 @@
     <Tags>interactive,video,bandersnatch,choices,player</Tags>
     <Overview>Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.</Overview>
     <ImageUrl></ImageUrl>
-    <Version>1.1.0.0</Version>
+    <Version>1.1.1.0</Version>
     <TargetAbi>10.8.0.0</TargetAbi>
     <Framework>net6.0</Framework>
     <Dependencies>
