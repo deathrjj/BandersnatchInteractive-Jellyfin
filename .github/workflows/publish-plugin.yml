@@ -18,6 +18,8 @@ jobs:
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        ref: master
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -120,6 +122,6 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to manifest.json"
         else
-          git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.0' }}"
-          git push
+          git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.1' }}"
+          git push origin master
         fi 
