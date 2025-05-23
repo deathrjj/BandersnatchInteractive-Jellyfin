@@ -62,7 +62,7 @@ jobs:
           VERSION="${{ github.event.release.tag_name }}"
           CHANGELOG="${{ github.event.release.body }}"
         else
-          VERSION="1.1.1"
+          VERSION="1.1.2"
           CHANGELOG="Automated build - Enhanced repository structure with proper manifest.json support for Jellyfin plugin repositories"
         fi
         
@@ -122,10 +122,23 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        
+        echo "Current git status:"
+        git status
+        
+        echo "Current branch/HEAD info:"
+        git branch -a
+        git log --oneline -1
+        
         git add manifest.json
         if git diff --staged --quiet; then
           echo "No changes to manifest.json"
         else
-          git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.1' }}"
+          echo "Committing changes to manifest.json"
+          git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.2' }}"
+          
+          echo "Pushing changes using HEAD:master"
           git push origin HEAD:master
+          
+          echo "Push completed successfully"
         fi 

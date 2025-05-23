@@ -14,7 +14,7 @@ tags:
   - "subtitles"
 nicename: "Interactive Video Player"
 imageUrl: ""
-version: "1.1.1"
+version: "1.1.2"
 jellyfinVersion: "10.8.0"
 dotnetTarget: "net6.0"
 framework: "netstandard2.1" 
