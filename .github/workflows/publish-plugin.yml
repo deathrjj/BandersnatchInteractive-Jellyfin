@@ -53,12 +53,16 @@ jobs:
 
     - name: Update manifest.json
       run: |
+        # Fetch latest manifest.json from master branch
+        git fetch origin master
+        git checkout origin/master -- manifest.json || echo "No existing manifest.json found"
+        
         # Get release information
         if [ "${{ github.event_name }}" = "release" ]; then
           VERSION="${{ github.event.release.tag_name }}"
           CHANGELOG="${{ github.event.release.body }}"
         else
-          VERSION="1.1.0"
+          VERSION="1.1.1"
           CHANGELOG="Automated build - Enhanced repository structure with proper manifest.json support for Jellyfin plugin repositories"
         fi
         
