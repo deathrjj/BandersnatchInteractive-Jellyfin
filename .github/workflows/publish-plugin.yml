@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -41,14 +43,11 @@ jobs:
 
     - name: Upload plugin zip to release
       if: github.event_name == 'release'
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v1
+      with:
+        files: plugin.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./plugin.zip
-        asset_name: plugin.zip
-        asset_content_type: application/zip
 
     - name: Update manifest.json
       run: |
@@ -77,27 +76,27 @@ jobs:
         
         # Create manifest.json
         cat > manifest.json << 'EOF'
-[
-    {
-        "category": "General",
-        "guid": "42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c",
-        "name": "Interactive Video Player",
-        "description": "Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines. Enables choose-your-own-adventure playbook directly within Jellyfin.",
-        "owner": "deathrjj",
-        "overview": "Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.",
-        "versions": [
+        [
             {
-                "checksum": "CHECKSUM_PLACEHOLDER",
-                "changelog": "CHANGELOG_PLACEHOLDER",
-                "targetAbi": "10.8.0.0",
-                "sourceUrl": "DOWNLOAD_URL_PLACEHOLDER",
-                "timestamp": "TIMESTAMP_PLACEHOLDER",
-                "version": "VERSION_PLACEHOLDER"
+                "category": "General",
+                "guid": "42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c",
+                "name": "Interactive Video Player",
+                "description": "Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines. Enables choose-your-own-adventure playbook directly within Jellyfin.",
+                "owner": "deathrjj",
+                "overview": "Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.",
+                "versions": [
+                    {
+                        "checksum": "CHECKSUM_PLACEHOLDER",
+                        "changelog": "CHANGELOG_PLACEHOLDER",
+                        "targetAbi": "10.8.0.0",
+                        "sourceUrl": "DOWNLOAD_URL_PLACEHOLDER",
+                        "timestamp": "TIMESTAMP_PLACEHOLDER",
+                        "version": "VERSION_PLACEHOLDER"
+                    }
+                ]
             }
         ]
-    }
-]
-EOF
+        EOF
         
         # Replace placeholders
         sed -i "s/CHECKSUM_PLACEHOLDER/${{ steps.package.outputs.checksum }}/g" manifest.json
