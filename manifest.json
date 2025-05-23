@@ -3,17 +3,17 @@
         "category": "General",
         "guid": "42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c",
         "name": "Interactive Video Player",
-        "description": "Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines. Enables choose-your-own-adventure playback directly within Jellyfin.",
+        "description": "Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines. Enables choose-your-own-adventure playbook directly within Jellyfin.",
         "owner": "deathrjj",
         "overview": "Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.",
         "versions": [
             {
-                "checksum": "e3b0c44298fc1c149afbf4c8996fb924",
-                "changelog": "Initial release: Full interactive video support with choice-based navigation, keyboard controls (F/R/Space/Arrows/0/Enter/S), speed management (0.25x-4x), embedded English subtitles, state persistence, and comprehensive API endpoints. Plugin builds to 315KB with all dependencies. Compatible with Jellyfin 10.8.0+ and .NET 6.0+.",
+                "checksum": "42c96d9f551f10d5c038533b10ad7164",
+                "changelog": "Enhanced repository structure for Jellyfin plugin distribution - Added proper manifest.json support, GitHub Actions automation for releases, improved installation via Jellyfin's native plugin repository system. Now supports one-click installation from plugin repositories.",
                 "targetAbi": "10.8.0.0",
-                "sourceUrl": "https://github.com/deathrjj/BandersnatchInteractive-Jellyfin/releases/download/v1.0.0/plugin-v1.0.0.zip",
-                "timestamp": "2025-05-23T17:54:00.000Z",
-                "version": "1.0.0.0"
+                "sourceUrl": "https://github.com/deathrjj/BandersnatchInteractive-Jellyfin/releases/download/v1.1.0/plugin.zip",
+                "timestamp": "2025-05-23T18:30:00.000Z",
+                "version": "1.1.0.0"
             }
         ]
     }
