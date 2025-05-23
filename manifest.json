@@ -8,13 +8,13 @@
         "overview": "Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.",
         "versions": [
             {
-                "checksum": "74197ce06b84c33ef4211801767d0fe9",
-                "changelog": "Release v1.1.1: Fix GitHub Actions workflow and improve release automation. Updated to modern GitHub Actions, fixed YAML syntax issues, improved release asset upload reliability, enhanced authentication handling.",
+                "checksum": "8ccf7c1a0043b709d765d2c9b6bd25ba",
+                "changelog": " ",
                 "targetAbi": "10.8.0.0",
-                "sourceUrl": "https://github.com/deathrjj/BandersnatchInteractive-Jellyfin/releases/download/v1.1.1/plugin.zip",
-                "timestamp": "2025-05-23T22:20:00.000Z",
-                "version": "1.1.1.0"
+                "sourceUrl": "https://github.com/deathrjj/BandersnatchInteractive-Jellyfin/releases/download/v1.1.2/plugin.zip",
+                "timestamp": "2025-05-23T21:34:58.310Z",
+                "version": "1.1.2"
             }
         ]
     }
-] 
+]
