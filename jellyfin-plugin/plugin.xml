@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Package>Jellyfin.Plugin.InteractiveVideo</Package>
-  <Name>Interactive Video Player</Name>
-  <Description>Enables interactive video playback for Black Mirror: Bandersnatch and other interactive content</Description>
-  <Id>42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c</Id>
-  <Category>General</Category>
-  <Overview>Interactive Video Player plugin that enables choose-your-own-adventure style video playback with branching narratives and user choices</Overview>
-  <ProjectUrl>https://github.com/jellyfin/jellyfin-plugin-interactivevideo</ProjectUrl>
-  <IssueUrl>https://github.com/jellyfin/jellyfin-plugin-interactivevideo/issues</IssueUrl>
-  <Version>1.0.0.0</Version>
-  <CompatVersion>10.8.0.0</CompatVersion>
-  <Framework>net6.0</Framework>
-  <Owner>Interactive Video Team</Owner>
-  <SourceUrl>https://github.com/jellyfin/jellyfin-plugin-interactivevideo</SourceUrl>
-  <TargetAbi>10.8.0.0</TargetAbi>
-  <Timestamp>2024-01-01T00:00:00Z</Timestamp>
-  <License>GPL-3.0</License>
-  <RequiresRestart>false</RequiresRestart>
-  <AutoUpdate>true</AutoUpdate>
-</Manifest> 
+<Plugin schemaVersion="1">
+  <PluginInfo>
+    <Name>Interactive Video Player</Name>
+    <Description>Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines</Description>
+    <Id>42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c</Id>
+    <Owner>deathrjj</Owner>
+    <Category>General</Category>
+    <Tags>interactive,video,bandersnatch,choices,player</Tags>
+    <Overview>Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.</Overview>
+    <ImageUrl></ImageUrl>
+    <Version>1.1.0.0</Version>
+    <TargetAbi>10.8.0.0</TargetAbi>
+    <Framework>net6.0</Framework>
+    <Dependencies>
+      <Dependency MinVersion="10.8.0.0" Name="MediaBrowser.Server.Core" />
+    </Dependencies>
+  </PluginInfo>
+</Plugin> 

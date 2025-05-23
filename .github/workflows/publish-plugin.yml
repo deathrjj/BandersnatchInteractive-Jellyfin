@@ -1,0 +1,126 @@
+name: "Publish Plugin"
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Build plugin
+      run: |
+        cd jellyfin-plugin
+        chmod +x build.sh
+        ./build.sh
+
+    - name: Create plugin zip and calculate checksum
+      id: package
+      run: |
+        cd plugin
+        zip -r ../plugin.zip *
+        cd ..
+        CHECKSUM=$(md5sum plugin.zip | cut -d' ' -f1)
+        echo "checksum=${CHECKSUM}" >> $GITHUB_OUTPUT
+        echo "Plugin zip created: $(ls -lh plugin.zip | awk '{print $5}')"
+        echo "Plugin checksum: ${CHECKSUM}"
+
+    - name: Upload plugin zip to release
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./plugin.zip
+        asset_name: plugin.zip
+        asset_content_type: application/zip
+
+    - name: Update manifest.json
+      run: |
+        # Get release information
+        if [ "${{ github.event_name }}" = "release" ]; then
+          VERSION="${{ github.event.release.tag_name }}"
+          CHANGELOG="${{ github.event.release.body }}"
+        else
+          VERSION="1.1.0"
+          CHANGELOG="Automated build - Enhanced repository structure with proper manifest.json support for Jellyfin plugin repositories"
+        fi
+        
+        # Clean version string (remove 'v' prefix if present)
+        VERSION=${VERSION#v}
+        
+        # Ensure version has .0 suffix if not present
+        if [[ ! "$VERSION" =~ \.[0-9]+$ ]]; then
+          VERSION="${VERSION}.0"
+        fi
+        
+        # Get current timestamp
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
+        
+        # Get download URL
+        DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/plugin.zip"
+        
+        # Create manifest.json
+        cat > manifest.json << 'EOF'
+[
+    {
+        "category": "General",
+        "guid": "42d83eb8-b6b2-4b1b-b3d9-0c2f2b3b5a6c",
+        "name": "Interactive Video Player",
+        "description": "Interactive video player for Black Mirror: Bandersnatch with choice-based navigation and branching storylines. Enables choose-your-own-adventure playbook directly within Jellyfin.",
+        "owner": "deathrjj",
+        "overview": "Transform your Jellyfin into an interactive video experience with this plugin that adds choice-based navigation to Black Mirror: Bandersnatch. Features include keyboard controls, speed management, subtitle support, and state persistence across sessions.",
+        "versions": [
+            {
+                "checksum": "CHECKSUM_PLACEHOLDER",
+                "changelog": "CHANGELOG_PLACEHOLDER",
+                "targetAbi": "10.8.0.0",
+                "sourceUrl": "DOWNLOAD_URL_PLACEHOLDER",
+                "timestamp": "TIMESTAMP_PLACEHOLDER",
+                "version": "VERSION_PLACEHOLDER"
+            }
+        ]
+    }
+]
+EOF
+        
+        # Replace placeholders
+        sed -i "s/CHECKSUM_PLACEHOLDER/${{ steps.package.outputs.checksum }}/g" manifest.json
+        sed -i "s|DOWNLOAD_URL_PLACEHOLDER|${DOWNLOAD_URL}|g" manifest.json
+        sed -i "s/TIMESTAMP_PLACEHOLDER/${TIMESTAMP}/g" manifest.json
+        sed -i "s/VERSION_PLACEHOLDER/${VERSION}/g" manifest.json
+        
+        # Escape changelog for JSON (basic escaping)
+        CHANGELOG_ESCAPED=$(echo "${CHANGELOG}" | sed 's/"/\\"/g' | sed 's/\//\\\//g' | tr '\n' ' ')
+        sed -i "s/CHANGELOG_PLACEHOLDER/${CHANGELOG_ESCAPED}/g" manifest.json
+        
+        echo "Generated manifest.json for version ${VERSION}"
+        echo "Download URL: ${DOWNLOAD_URL}"
+        cat manifest.json
+
+    - name: Commit and push manifest
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add manifest.json
+        if git diff --staged --quiet; then
+          echo "No changes to manifest.json"
+        else
+          git commit -m "Update manifest.json for release ${{ github.event.release.tag_name || 'v1.1.0' }}"
+          git push
+        fi 
